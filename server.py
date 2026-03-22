@@ -116,7 +116,11 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    try:
+        return pwd_context.hash(password)
+    except Exception as e:
+        print(f"Password hash error: {e}")
+        raise HTTPException(status_code=500, detail=f"Password hashing failed: {str(e)}")
 
 def generate_referral_code(name: str) -> str:
     """Generate a unique referral code from user name"""
